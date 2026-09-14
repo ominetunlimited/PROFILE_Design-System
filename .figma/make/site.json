@@ -1,0 +1,12 @@
+{
+  "title": "PROFILE",
+  "description": "Connect and verify professional identities, showcasing skills and achievements while offering opportunities for growth and collaboration across various sectors.",
+  "language": "En",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

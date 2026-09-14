@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-technical: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Primary brand */
+  --color-profile-blue: #0057D9;
+  --color-profile-deep: #003A8C;
+  --color-profile-gold: #F4B400;
+  --color-profile-cyan: #00E5FF;
+  --color-profile-coral: #FF6F59;
+
+  /* Light tints */
+  --color-profile-gold-light: #FFF8E1;
+  --color-profile-blue-light: #EEF4FF;
+  --color-profile-blue-mid: #DBEAFE;
+  --color-profile-cyan-light: #E0FFFE;
+  --color-profile-surface: #F8FAFC;
+
+  /* Semantic */
+  --color-success: #00C853;
+  --color-success-light: #DCFCE7;
+  --color-warning: #F59E0B;
+  --color-warning-light: #FEF3C7;
+  --color-error: #DC2626;
+  --color-error-light: #FEE2E2;
+  --color-info: #0EA5E9;
+  --color-info-light: #E0F2FE;
+
+  /* Dark mode surfaces */
+  --color-dark-bg: #060E1C;
+  --color-dark-surface-0: #0C1829;
+  --color-dark-surface-1: #0F1F35;
+  --color-dark-surface-2: #142440;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #F8FAFC;
+  color: #1E293B;
+  margin: 0;
+  padding: 0;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  body.theme-system {
+    background-color: #060E1C;
+    color: rgba(255,255,255,.90);
+  }
+}
+body.theme-dark {
+  background-color: #060E1C;
+  color: rgba(255,255,255,.90);
+}
+body.theme-light {
+  background-color: #F8FAFC;
+  color: #1E293B;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+.sidebar-scroll::-webkit-scrollbar { display: none; }
+.sidebar-scroll { scrollbar-width: none; }
+
+.glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.88);
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px) scale(1.005);
+  box-shadow: 0 12px 40px rgba(0, 87, 217, 0.10);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #0057D9, #003A8C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Verified badge pulse */
+@keyframes verified-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+.verified-pulse {
+  animation: verified-pulse 2s ease-in-out infinite;
+}
+
+/* Trust Score ring animation */
+@keyframes trust-ring-fill {
+  from { stroke-dashoffset: 251.2; }
+}
+
+/* Skeleton shimmer */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up {
+  animation: fade-up 0.4s ease forwards;
+}
+
+/* IBM Plex Sans for technical/data surfaces */
+.font-technical {
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+/* Copilot panel */
+.copilot-shadow {
+  box-shadow: 0 8px 48px rgba(0, 87, 217, 0.18), 0 2px 12px rgba(0,0,0,.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
