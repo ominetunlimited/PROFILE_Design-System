@@ -24,6 +24,11 @@ import ApplicationTracking from './pages/ApplicationTracking'
 import OrdersBilling from './pages/OrdersBilling'
 import MissionControl from './pages/MissionControl'
 import CopilotPage from './pages/CopilotPage'
+import Notifications from './pages/Notifications'
+import HelpSupport from './pages/HelpSupport'
+import StoreHub from './pages/StoreHub'
+import OrgDashboard from './pages/OrgDashboard'
+import { ToastProvider } from './components/ui/Toast'
 
 type AppView = 'landing' | 'auth-signin' | 'auth-signup' | 'app'
 
@@ -60,6 +65,11 @@ export default function App() {
       case 'orders': return <OrdersBilling />
       case 'mission-control': return <MissionControl />
       case 'copilot': return <CopilotPage />
+      case 'notifications': return <Notifications />
+      case 'help': return <HelpSupport />
+      case 'store': return <StoreHub />
+      case 'org': return <OrgDashboard />
+      case 'marketplace': return <StoreHub />
       default: return <Dashboard />
     }
   }
@@ -87,7 +97,8 @@ export default function App() {
 
   // Main app
   return (
-    <div className="min-h-screen bg-[#F8FAFF] flex">
+  <ToastProvider>
+    <div className="min-h-screen bg-[#F8FAFC] flex">
       <Sidebar currentPage={currentPage} onNavigate={navigate} />
 
       <div className="flex-1 min-w-0 flex flex-col">
@@ -115,5 +126,6 @@ export default function App() {
         currentPage={currentPage}
       />
     </div>
+  </ToastProvider>
   )
 }

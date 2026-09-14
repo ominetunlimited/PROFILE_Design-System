@@ -80,8 +80,44 @@ const portfolio = [
   },
 ]
 
+type ProfileTab = 'overview' | 'experience' | 'education' | 'skills' | 'projects' | 'publications' | 'portfolio' | 'cv'
+
+const tools = [
+  { name: 'Figma', category: 'Design' }, { name: 'VS Code', category: 'Dev' }, { name: 'Terraform', category: 'DevOps' },
+  { name: 'Datadog', category: 'Ops' }, { name: 'Notion', category: 'Productivity' }, { name: 'Slack', category: 'Comms' },
+  { name: 'ChatGPT', category: 'AI' }, { name: 'Linear', category: 'Productivity' },
+]
+
+const projects = [
+  {
+    name: 'Distributed Route Planner', role: 'Lead Engineer', status: 'ongoing',
+    desc: 'Open-source route optimization library processing 2B+ daily path requests. 2.4k GitHub stars.',
+    skills: ['Go', 'Distributed Systems', 'gRPC'], img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=300&h=180&fit=crop&auto=format',
+    attribution: true,
+  },
+  {
+    name: 'ML Fraud Detection Pipeline', role: 'Co-author', status: 'completed',
+    desc: 'Real-time fraud scoring at Stripe. Reduced false positives 28%, deployed to 100+ countries.',
+    skills: ['ML', 'Python', 'Kafka', 'Spark'], img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=180&fit=crop&auto=format',
+    attribution: true,
+  },
+]
+
+const publications = [
+  {
+    title: 'Scaling Route Optimization: Lessons from 8 Billion Daily Requests',
+    journal: 'ACM SIGOPS Operating Systems Review', year: '2024', doi: '10.1145/xyz',
+    coauthors: ['M. Park', 'J. Lin'], verified: true,
+  },
+  {
+    title: 'Adaptive Fraud Detection in High-Frequency Payment Streams',
+    journal: 'IEEE Transactions on Dependable and Secure Computing', year: '2022', doi: '10.1109/abc',
+    coauthors: ['A. Diallo', 'F. Al-Hassan'], verified: true,
+  },
+]
+
 export default function ProfilePage() {
-  const [activeTab, setActiveTab] = useState<'overview' | 'experience' | 'portfolio' | 'cv'>('overview')
+  const [activeTab, setActiveTab] = useState<ProfileTab>('overview')
 
   return (
     <div className="max-w-5xl mx-auto px-4 lg:px-6 py-6 pb-24 lg:pb-6">
@@ -172,15 +208,19 @@ export default function ProfilePage() {
 
       {/* Tabs */}
       <div className="flex gap-1 bg-slate-100 rounded-xl p-1 mb-6 overflow-x-auto">
-        {(['overview', 'experience', 'portfolio', 'cv'] as const).map(tab => (
+        {([
+          ['overview', 'Overview'], ['experience', 'Experience'], ['education', 'Education'],
+          ['skills', 'Skills & Tools'], ['projects', 'Projects'], ['publications', 'Publications'],
+          ['portfolio', 'Portfolio'], ['cv', 'CV Builder'],
+        ] as [ProfileTab, string][]).map(([tab, label]) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded-lg text-sm font-semibold capitalize transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
               activeTab === tab ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'
             }`}
           >
-            {tab === 'cv' ? 'CV Builder' : tab}
+            {label}
           </button>
         ))}
       </div>
@@ -317,6 +357,134 @@ export default function ProfilePage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {activeTab === 'education' && (
+        <div className="space-y-4">
+          {education.map(edu => (
+            <div key={edu.degree} className="bg-white rounded-2xl border border-slate-100 p-5">
+              <div className="flex items-start justify-between flex-wrap gap-2">
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-bold text-slate-800" style={{ fontFamily: 'Plus Jakarta Sans' }}>{edu.degree}</h3>
+                    {edu.verified && <VerificationBadge level="institution" size="sm" showLabel />}
+                  </div>
+                  <div className="text-sm text-slate-600 mt-0.5">{edu.institution}</div>
+                  <div className="text-xs text-slate-400 mt-0.5">{edu.period} · GPA: {edu.gpa}</div>
+                </div>
+                <Badge variant="success" size="sm">Verified</Badge>
+              </div>
+            </div>
+          ))}
+          <button className="w-full border-2 border-dashed border-slate-200 rounded-2xl p-4 text-center text-sm font-semibold text-slate-400 hover:border-[#0057D9] hover:text-[#0057D9] transition-all cursor-pointer flex items-center justify-center gap-2">
+            <Plus size={15} />Add education
+          </button>
+        </div>
+      )}
+
+      {activeTab === 'skills' && (
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-5">
+          <div>
+            <h3 className="font-bold text-slate-800 mb-4" style={{ fontFamily: 'Plus Jakarta Sans' }}>Skills</h3>
+            <div className="space-y-3">
+              {skills.map(skill => (
+                <div key={skill.name} className="bg-white border border-slate-100 rounded-2xl p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-sm text-slate-800">{skill.name}</span>
+                      <Badge variant="outline" size="sm">{skill.category}</Badge>
+                    </div>
+                    <span className="text-xs font-bold text-[#0057D9]">{skill.level}%</span>
+                  </div>
+                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-[#0057D9] rounded-full transition-all" style={{ width: `${skill.level}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className="w-full mt-3 border-2 border-dashed border-slate-200 rounded-2xl p-4 text-center text-sm font-semibold text-slate-400 hover:border-[#0057D9] hover:text-[#0057D9] transition-all cursor-pointer flex items-center justify-center gap-2">
+              <Plus size={15} />Add skill
+            </button>
+          </div>
+          <div>
+            <h3 className="font-bold text-slate-800 mb-4" style={{ fontFamily: 'Plus Jakarta Sans' }}>Tools</h3>
+            <div className="flex flex-wrap gap-2">
+              {tools.map(tool => (
+                <div key={tool.name} className="bg-white border border-slate-100 rounded-xl px-3 py-2 flex items-center gap-1.5">
+                  <span className="text-sm font-semibold text-slate-700">{tool.name}</span>
+                  <span className="text-[10px] font-bold text-slate-400">{tool.category}</span>
+                </div>
+              ))}
+              <button className="border-2 border-dashed border-slate-200 rounded-xl px-3 py-2 text-sm font-semibold text-slate-400 hover:border-[#0057D9] hover:text-[#0057D9] transition-all cursor-pointer flex items-center gap-1">
+                <Plus size={13} />Add tool
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'projects' && (
+        <div className="space-y-4">
+          {projects.map(project => (
+            <div key={project.name} className="bg-white rounded-2xl border border-slate-100 overflow-hidden card-hover cursor-pointer">
+              <div className="flex flex-col md:flex-row">
+                <div className="md:w-48 h-36 md:h-auto bg-slate-100 shrink-0">
+                  <img src={project.img} alt={project.name} className="w-full h-full object-cover" />
+                </div>
+                <div className="p-5 flex-1">
+                  <div className="flex items-start justify-between flex-wrap gap-2">
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-bold text-slate-800" style={{ fontFamily: 'Plus Jakarta Sans' }}>{project.name}</h3>
+                        {project.attribution && <Badge variant="blue" size="sm">Attributed</Badge>}
+                        <Badge variant={project.status === 'ongoing' ? 'success' : 'outline'} size="sm">{project.status}</Badge>
+                      </div>
+                      <div className="text-xs text-slate-500 mt-0.5">Role: {project.role}</div>
+                    </div>
+                    <button className="p-1.5 rounded-lg hover:bg-slate-100 cursor-pointer">
+                      <ExternalLink size={14} className="text-slate-400" />
+                    </button>
+                  </div>
+                  <p className="text-sm text-slate-700 leading-relaxed mt-2">{project.desc}</p>
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {project.skills.map(s => <Badge key={s} variant="blue" size="sm">{s}</Badge>)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          <button className="w-full border-2 border-dashed border-slate-200 rounded-2xl p-4 text-center text-sm font-semibold text-slate-400 hover:border-[#0057D9] hover:text-[#0057D9] transition-all cursor-pointer flex items-center justify-center gap-2">
+            <Plus size={15} />Add project
+          </button>
+        </div>
+      )}
+
+      {activeTab === 'publications' && (
+        <div className="space-y-4">
+          {publications.map(pub => (
+            <div key={pub.title} className="bg-white border border-slate-100 rounded-2xl p-5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1">
+                  <div className="flex items-start gap-2 flex-wrap">
+                    <h3 className="font-bold text-slate-800 text-sm leading-snug" style={{ fontFamily: 'Plus Jakarta Sans' }}>{pub.title}</h3>
+                    {pub.verified && <VerificationBadge level="verified" size="sm" />}
+                  </div>
+                  <div className="text-xs text-slate-600 mt-1">{pub.journal} · {pub.year}</div>
+                  <div className="text-xs text-slate-400 mt-0.5">With {pub.coauthors.join(', ')}</div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <button className="text-xs font-bold text-[#0057D9] hover:underline cursor-pointer flex items-center gap-1">
+                      <ExternalLink size={10} />DOI: {pub.doi}
+                    </button>
+                    <Badge variant="blue" size="sm">Peer reviewed</Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          <button className="w-full border-2 border-dashed border-slate-200 rounded-2xl p-4 text-center text-sm font-semibold text-slate-400 hover:border-[#0057D9] hover:text-[#0057D9] transition-all cursor-pointer flex items-center justify-center gap-2">
+            <Plus size={15} />Add publication
+          </button>
         </div>
       )}
 

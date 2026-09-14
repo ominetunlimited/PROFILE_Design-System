@@ -48,9 +48,9 @@ export default function TopBar({ onNavigate, onCreateActivity }: TopBarProps) {
         </button>
 
         {/* Notifications */}
-        <button className="relative p-2 rounded-xl hover:bg-slate-100 text-slate-600 cursor-pointer" onClick={() => {}}>
+        <button className="relative p-2 rounded-xl hover:bg-slate-100 text-slate-600 cursor-pointer" onClick={() => onNavigate('notifications')}>
           <Bell size={18} />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#1565D8] rounded-full border-2 border-white" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#0057D9] rounded-full border-2 border-white" />
         </button>
 
         {/* Messages */}
@@ -80,19 +80,26 @@ export default function TopBar({ onNavigate, onCreateActivity }: TopBarProps) {
                 <div className="text-xs text-slate-500">james@example.com</div>
               </div>
               {[
-                { icon: User, label: 'View Profile' },
-                { icon: Settings, label: 'Settings' },
-                { icon: LogOut, label: 'Sign Out', danger: true },
-              ].map(({ icon: Icon, label, danger }) => (
+                { icon: User, label: 'View Profile', page: 'cv' as const },
+                { icon: Settings, label: 'Settings', page: 'settings' as const },
+              ].map(({ icon: Icon, label, page }) => (
                 <button
                   key={label}
-                  className={`w-full flex items-center gap-2.5 px-4 py-2 text-sm hover:bg-slate-50 cursor-pointer transition-colors ${danger ? 'text-red-600' : 'text-slate-700'}`}
-                  onClick={() => setMenuOpen(false)}
+                  className="w-full flex items-center gap-2.5 px-4 py-2 text-sm hover:bg-slate-50 cursor-pointer transition-colors text-slate-700"
+                  onClick={() => { setMenuOpen(false); onNavigate(page) }}
                 >
                   <Icon size={15} />
                   {label}
                 </button>
               ))}
+              <div className="border-t border-slate-100 mt-1 pt-1">
+                <button
+                  className="w-full flex items-center gap-2.5 px-4 py-2 text-sm hover:bg-slate-50 cursor-pointer transition-colors text-red-600"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <LogOut size={15} />Sign Out
+                </button>
+              </div>
             </div>
           )}
         </div>

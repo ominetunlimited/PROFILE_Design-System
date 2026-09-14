@@ -2,7 +2,7 @@ import {
   Home, Compass, Users, FileText, Briefcase, Store, MessageCircle,
   BarChart2, ShieldCheck, BadgeCheck, Layers, BookOpen, Settings,
   ChevronRight, Lock, CreditCard, Award, KanbanSquare, Bot,
-  Building2, Cpu
+  Building2, Cpu, Bell, HelpCircle
 } from 'lucide-react'
 import { ProfileIcon, ProfileWordmark } from '../ui/ProfileLogo'
 
@@ -12,6 +12,7 @@ export type Page =
   | 'communities' | 'learning' | 'settings'
   | 'references' | 'security' | 'tracking' | 'orders'
   | 'recruiter' | 'institution' | 'mission-control' | 'copilot'
+  | 'notifications' | 'help' | 'store' | 'org'
 
 interface NavItem {
   id: Page
@@ -24,9 +25,10 @@ const primary: NavItem[] = [
   { id: 'home', label: 'Home', icon: Home },
   { id: 'discover', label: 'Discover', icon: Compass },
   { id: 'connections', label: 'Connections', icon: Users, badge: 3 },
-  { id: 'cv', label: 'My CV', icon: FileText },
+  { id: 'notifications', label: 'Notifications', icon: Bell, badge: 3 },
+  { id: 'cv', label: 'My Profile & CV', icon: FileText },
   { id: 'opportunity', label: 'Opportunity Hub', icon: Briefcase, badge: 12 },
-  { id: 'marketplace', label: 'Marketplace', icon: Store },
+  { id: 'store', label: 'Marketplace', icon: Store },
   { id: 'messages', label: 'Messages', icon: MessageCircle, badge: 5 },
   { id: 'analytics', label: 'Analytics', icon: BarChart2 },
 ]
@@ -152,9 +154,11 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
           </div>
         </div>
 
-        {/* Copilot + Settings */}
+        {/* Copilot + Help + Settings */}
         <div className="space-y-0.5">
+          <NavLink item={{ id: 'org', label: 'Organisation', icon: Building2 }} active={currentPage === 'org'} onClick={() => onNavigate('org')} />
           <NavLink item={{ id: 'copilot', label: 'PROFILE Copilot', icon: Bot }} active={currentPage === 'copilot'} onClick={() => onNavigate('copilot')} />
+          <NavLink item={{ id: 'help', label: 'Help & Support', icon: HelpCircle }} active={currentPage === 'help'} onClick={() => onNavigate('help')} />
           <NavLink item={{ id: 'settings', label: 'Settings', icon: Settings }} active={currentPage === 'settings'} onClick={() => onNavigate('settings')} />
         </div>
       </div>
