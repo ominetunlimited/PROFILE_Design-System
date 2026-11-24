@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Search, Filter, MapPin, TrendingUp, Users, Star, ArrowUpRight } from 'lucide-react'
+import { Search, Filter, MapPin, TrendingUp, Users, Star, ArrowUpRight, Globe, Check } from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import VerificationBadge from '../components/ui/VerificationBadge'
 import TrustScore from '../components/ui/TrustScore'
@@ -187,9 +187,10 @@ export default function Discover() {
                   fullWidth
                   size="sm"
                   variant={connected.includes(person.name) ? 'secondary' : 'primary'}
+                  icon={connected.includes(person.name) ? <Check size={13} /> : undefined}
                   onClick={() => setConnected(c => c.includes(person.name) ? c.filter(x => x !== person.name) : [...c, person.name])}
                 >
-                  {connected.includes(person.name) ? 'Connected ✓' : 'Connect'}
+                  {connected.includes(person.name) ? 'Connected' : 'Connect'}
                 </Button>
                 <Button variant="outline" size="sm" icon={<ArrowUpRight size={13} />} className="shrink-0">
                   Profile
@@ -232,7 +233,9 @@ export default function Discover() {
 
       {(activeTab === 'institutions' || activeTab === 'communities') && (
         <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center">
-          <div className="text-3xl mb-3">🌐</div>
+          <div className="mx-auto mb-3 size-12 rounded-2xl bg-profile-blue-light text-profile-blue flex items-center justify-center">
+            <Globe size={24} />
+          </div>
           <h3 className="font-bold text-slate-700" style={{ fontFamily: 'Plus Jakarta Sans' }}>
             {activeTab === 'institutions' ? 'Institution Directory' : 'Professional Communities'}
           </h3>

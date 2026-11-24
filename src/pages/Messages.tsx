@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Search, Send, MoreHorizontal, Phone, Video, CheckCheck, Plus, Smile, Paperclip } from 'lucide-react'
+import { Search, Send, MoreHorizontal, Phone, Video, CheckCheck, Plus, Smile, Paperclip } from '../components/ui/icons'
 import VerificationBadge from '../components/ui/VerificationBadge'
 
 const conversations = [

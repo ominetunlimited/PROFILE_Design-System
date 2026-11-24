@@ -2,7 +2,7 @@ import { useState } from 'react'
 import {
   Bot, Sparkles, TrendingUp, Shield, Send,
   CheckCircle, BookOpen, Briefcase, Target, ChevronRight
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Button from '../components/ui/Button'
 import Badge from '../components/ui/Badge'
 

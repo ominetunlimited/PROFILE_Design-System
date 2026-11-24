@@ -2,7 +2,7 @@ import { useState } from 'react'
 import {
   Search, Star, MessageCircle,
   Calendar, ChevronRight, Bookmark, Eye, Shield, MapPin, Briefcase, SlidersHorizontal
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import TrustScore from '../components/ui/TrustScore'

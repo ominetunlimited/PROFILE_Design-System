@@ -2,18 +2,13 @@ import { useState } from 'react'
 import {
   Building2, Users, Shield, BarChart2, Settings, Plus,
   ChevronRight, CheckCircle, TrendingUp, Globe, BadgeCheck,
-  Mail, Lock, Zap, ArrowRightLeft, Star
-} from 'lucide-react'
+  Mail, Lock, Zap, Star
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import VerificationBadge from '../components/ui/VerificationBadge'
 
 type OrgTab = 'overview' | 'members' | 'verification' | 'settings'
-
-const accounts = [
-  { id: 'personal', name: 'James Okafor', type: 'individual', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&auto=format', active: false },
-  { id: 'acme', name: 'Acme Engineering Ltd', type: 'organisation', avatar: null, active: true },
-]
 
 const members = [
   { name: 'James Okafor', email: 'james@acme.io', role: 'Owner', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=36&h=36&fit=crop&auto=format', verified: true, joined: 'Jan 2025' },
@@ -30,8 +25,6 @@ const roleColors: Record<string, string> = {
 
 export default function OrgDashboard() {
   const [tab, setTab] = useState<OrgTab>('overview')
-  const [activeAccount, setActiveAccount] = useState('acme')
-  const [showSwitcher, setShowSwitcher] = useState(false)
 
   const tabs: { id: OrgTab; label: string; icon: typeof Building2 }[] = [
     { id: 'overview', label: 'Overview', icon: Building2 },
@@ -42,56 +35,6 @@ export default function OrgDashboard() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 lg:px-6 py-6 pb-24 lg:pb-6">
-      {/* Account switcher */}
-      <div className="relative mb-6">
-        <button
-          onClick={() => setShowSwitcher(!showSwitcher)}
-          className="flex items-center gap-2.5 bg-white border border-slate-200 rounded-xl px-4 py-2.5 hover:border-slate-300 transition-all cursor-pointer"
-        >
-          <div className="w-7 h-7 bg-[#0057D9] rounded-lg flex items-center justify-center shrink-0">
-            <Building2 size={14} className="text-white" />
-          </div>
-          <div className="text-left">
-            <div className="text-sm font-bold text-slate-800">Acme Engineering Ltd</div>
-            <div className="text-[10px] text-slate-500">Organisation account</div>
-          </div>
-          <ArrowRightLeft size={13} className="text-slate-400 ml-2" />
-        </button>
-
-        {showSwitcher && (
-          <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded-2xl border border-slate-200 shadow-xl z-30 py-2 overflow-hidden">
-            <div className="px-3 pb-1.5">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Switch workspace</div>
-            </div>
-            {accounts.map(acc => (
-              <button
-                key={acc.id}
-                onClick={() => { setActiveAccount(acc.id); setShowSwitcher(false) }}
-                className={`w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-slate-50 transition-colors cursor-pointer ${activeAccount === acc.id ? 'bg-[#EEF4FF]' : ''}`}
-              >
-                {acc.avatar ? (
-                  <img src={acc.avatar} alt={acc.name} className="w-8 h-8 rounded-full object-cover" />
-                ) : (
-                  <div className="w-8 h-8 bg-[#0057D9] rounded-lg flex items-center justify-center shrink-0">
-                    <Building2 size={14} className="text-white" />
-                  </div>
-                )}
-                <div className="flex-1 text-left">
-                  <div className="text-sm font-semibold text-slate-800">{acc.name}</div>
-                  <div className="text-[10px] text-slate-500 capitalize">{acc.type}</div>
-                </div>
-                {activeAccount === acc.id && <CheckCircle size={14} className="text-[#0057D9]" />}
-              </button>
-            ))}
-            <div className="border-t border-slate-100 mt-1 pt-1 px-1">
-              <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#0057D9] font-semibold hover:bg-[#EEF4FF] rounded-xl cursor-pointer transition-colors">
-                <Plus size={14} />Create organisation
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
       <div className="flex items-start justify-between mb-6 flex-wrap gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-800" style={{ fontFamily: 'Plus Jakarta Sans' }}>Organisation Dashboard</h1>

@@ -2,9 +2,10 @@ import { useState } from 'react'
 import {
   Briefcase, MapPin, DollarSign, Calendar, MessageCircle,
   ChevronRight, Plus, Star, Clock, CheckCircle, XCircle, Filter
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
+import { useToast } from '../components/ui/Toast'
 
 type AppStage = 'applied' | 'shortlisted' | 'interview' | 'offer' | 'hired' | 'rejected'
 
@@ -82,9 +83,13 @@ export default function ApplicationTracking() {
   const [apps, setApps] = useState(initialApps)
   const [selectedId, setSelectedId] = useState<number | null>(1)
   const [view, setView] = useState<'kanban' | 'list'>('kanban')
+  const { toast } = useToast()
 
-  const moveStage = (id: number, stage: AppStage) =>
+  const moveStage = (id: number, stage: AppStage) => {
     setApps(prev => prev.map(a => a.id === id ? { ...a, stage } : a))
+    const application = apps.find(app => app.id === id)
+    toast('success', `Moved to ${stageConfig[stage].label}`, application ? `${application.role} at ${application.company}` : undefined)
+  }
 
   const selected = apps.find(a => a.id === selectedId)
   const activeApps = apps.filter(a => a.stage !== 'rejected')

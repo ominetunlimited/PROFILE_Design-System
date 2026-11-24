@@ -2,7 +2,7 @@ import { useState } from 'react'
 import {
   CreditCard, Download, Package, CheckCircle, Clock,
   Star, RotateCcw, AlertTriangle, ChevronRight, Plus, Shield
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 

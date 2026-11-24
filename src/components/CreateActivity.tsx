@@ -4,7 +4,8 @@ import {
   Download,
   Users, Building2, GraduationCap, Briefcase, Award,
   BookOpen, Trash2, Check, Lock, Globe, UserCheck
-} from 'lucide-react'
+} from './ui/icons'
+import { useToast } from './ui/Toast'
 
 interface CreateActivityProps {
   onClose: () => void
@@ -46,10 +47,15 @@ const visibilityOptions = [
   { value: 'recruiters', label: 'Recruiters + Connections', desc: 'Visible to verified recruiters', icon: Briefcase },
 ]
 
-const fileTypeIcon: Record<MediaType, string> = {
-  image: '🖼️', video: '🎬', audio: '🎵', pdf: '📄',
-  doc: '📝', spreadsheet: '📊', presentation: '📑',
-  epub: '📚', zip: '📦', research: '🔬', publication: '📰',
+const fileTypeIcon: Record<MediaType, typeof Image> = {
+  image: Image, video: Video, audio: Mic, pdf: FileText,
+  doc: FileText, spreadsheet: FileText, presentation: FileText,
+  epub: BookOpen, zip: Briefcase, research: BookOpen, publication: BookOpen,
+}
+
+function MediaFileIcon({ type }: { type: MediaType }) {
+  const Icon = fileTypeIcon[type]
+  return <Icon size={24} className="text-profile-blue" />
 }
 
 export default function CreateActivity({ onClose }: CreateActivityProps) {
@@ -71,10 +77,12 @@ export default function CreateActivity({ onClose }: CreateActivityProps) {
   const [step, setStep] = useState<'compose' | 'metadata' | 'preview'>('compose')
   const [posting, setPosting] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
+  const { toast } = useToast()
 
   const handlePost = () => {
     setPosting(true)
-    setTimeout(() => { setPosting(false); onClose() }, 1500)
+    toast('success', 'Activity published', 'Evidence, attribution, and visibility are being processed in the background.')
+    setTimeout(onClose, 250)
   }
 
   const addMockFile = (type: MediaType) => {
@@ -187,7 +195,7 @@ export default function CreateActivity({ onClose }: CreateActivityProps) {
                         <img src={file.preview} alt={file.name} className="w-full h-28 object-cover" />
                       ) : (
                         <div className="w-full h-24 bg-slate-50 flex flex-col items-center justify-center gap-1">
-                          <span className="text-2xl">{fileTypeIcon[file.type]}</span>
+                          <MediaFileIcon type={file.type} />
                           <span className="text-[10px] text-slate-500 font-medium truncate max-w-[80%]">{file.name}</span>
                           <span className="text-[9px] text-slate-400">{file.size}</span>
                         </div>
@@ -348,7 +356,9 @@ export default function CreateActivity({ onClose }: CreateActivityProps) {
                       f.preview ? (
                         <img key={f.id} src={f.preview} alt="" className="rounded-xl w-full h-24 object-cover" />
                       ) : (
-                        <div key={f.id} className="rounded-xl bg-slate-50 h-20 flex items-center justify-center text-2xl">{fileTypeIcon[f.type]}</div>
+                        <div key={f.id} className="rounded-xl bg-slate-50 h-20 flex items-center justify-center">
+                          <MediaFileIcon type={f.type} />
+                        </div>
                       )
                     ))}
                   </div>
@@ -397,9 +407,7 @@ export default function CreateActivity({ onClose }: CreateActivityProps) {
                 disabled={posting}
                 className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#1565D8] hover:bg-[#1255C0] text-white text-sm font-bold rounded-xl cursor-pointer transition-all disabled:opacity-60"
               >
-                {posting ? (
-                  <><svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>Publishing...</>
-                ) : '🚀 Publish Activity'}
+                {posting ? 'Published' : 'Publish Activity'}
               </button>
             </>
           )}

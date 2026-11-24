@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Star, ShoppingBag, Filter, Search, Heart } from 'lucide-react'
+import { Star, ShoppingBag, Filter, Search, Heart } from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import VerificationBadge from '../components/ui/VerificationBadge'
+import { useToast } from '../components/ui/Toast'
 
 type Category = 'all' | 'services' | 'courses' | 'templates' | 'consulting' | 'software'
 
@@ -102,7 +103,14 @@ const listings = [
 export default function Marketplace() {
   const [active, setActive] = useState<Category>('all')
   const [savedItems, setSavedItems] = useState<number[]>([])
+  const { toast } = useToast()
   const filtered = active === 'all' ? listings : listings.filter(l => l.category === active)
+
+  const toggleSaved = (id: number, title: string) => {
+    const nextSaved = !savedItems.includes(id)
+    setSavedItems(current => nextSaved ? [...current, id] : current.filter(itemId => itemId !== id))
+    toast(nextSaved ? 'success' : 'info', nextSaved ? 'Saved to your shortlist' : 'Removed from shortlist', title)
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 lg:px-6 py-6 pb-24 lg:pb-6">
@@ -159,7 +167,7 @@ export default function Marketplace() {
                 </div>
               )}
               <button
-                onClick={e => { e.stopPropagation(); setSavedItems(s => s.includes(item.id) ? s.filter(x => x !== item.id) : [...s, item.id]) }}
+                onClick={e => { e.stopPropagation(); toggleSaved(item.id, item.title) }}
                 className="absolute top-3 right-3 w-7 h-7 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow cursor-pointer hover:bg-white transition-colors"
               >
                 <Heart size={13} fill={savedItems.includes(item.id) ? '#EF4444' : 'none'} color={savedItems.includes(item.id) ? '#EF4444' : '#94A3B8'} />

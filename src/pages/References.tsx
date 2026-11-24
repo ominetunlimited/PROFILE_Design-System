@@ -2,10 +2,11 @@ import { useState } from 'react'
 import {
   Award, Send, Clock, CheckCircle, XCircle, Plus,
   FileText, Link2, ChevronRight, Star, Download, QrCode
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import VerificationBadge from '../components/ui/VerificationBadge'
+import { useToast } from '../components/ui/Toast'
 
 type ReferenceStatus = 'pending' | 'completed' | 'declined'
 type Tab = 'received' | 'sent' | 'request'
@@ -73,6 +74,13 @@ export default function References() {
   const [tab, setTab] = useState<Tab>('received')
   const [step, setStep] = useState(1)
   const [selectedRef, setSelectedRef] = useState<number | null>(null)
+  const { toast } = useToast()
+
+  const sendRequest = () => {
+    setTab('received')
+    setStep(1)
+    toast('success', 'Reference request sent', 'The request is now tracked in your reference history.')
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 lg:px-6 py-6 pb-24 lg:pb-6">
@@ -297,7 +305,7 @@ export default function References() {
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" fullWidth onClick={() => setStep(2)}>Back</Button>
-                <Button fullWidth icon={<Send size={13} />}>Send Request</Button>
+                <Button fullWidth icon={<Send size={13} />} onClick={sendRequest}>Send Request</Button>
               </div>
             </div>
           )}

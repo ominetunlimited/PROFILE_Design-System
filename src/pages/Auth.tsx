@@ -2,9 +2,9 @@ import { useState } from 'react'
 import {
   Eye, EyeOff, ArrowLeft, ArrowRight, CheckCircle, Mail,
   Smartphone, Key, Lock, User,
-  GraduationCap, Building2, Globe, Shield
-} from 'lucide-react'
-import { ProfileIcon, ProfileWordmark } from '../components/ui/ProfileLogo'
+  GraduationCap, Building2, Globe, Shield, Sparkles
+} from '../components/ui/icons'
+import { ProfileLogoFull } from '../components/ui/ProfileLogo'
 
 type AuthView = 'signin' | 'signup' | 'forgot' | 'mfa' | 'verify-email' | 'welcome' | 'account-type'
 type AccountType = 'individual' | 'organization' | 'institution' | null
@@ -55,10 +55,7 @@ function AuthShell({ children, showBack, onBack }: { children: React.ReactNode; 
         </div>
 
         <div className="relative z-10">
-          <div className="flex items-center gap-2.5 mb-12">
-            <ProfileIcon size={36} theme="light" />
-            <ProfileWordmark size={20} theme="white" />
-          </div>
+          <ProfileLogoFull height={52} theme="white" priority className="w-[174px] mb-12" />
 
           <div className="mb-auto">
             <h2 className="text-2xl font-black text-white leading-tight mb-4" style={{ fontFamily: 'Plus Jakarta Sans' }}>
@@ -90,10 +87,7 @@ function AuthShell({ children, showBack, onBack }: { children: React.ReactNode; 
       {/* Right panel */}
       <div className="flex-1 flex flex-col min-h-screen overflow-y-auto">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white lg:bg-transparent">
-          <div className="flex items-center gap-2 lg:hidden">
-            <ProfileIcon size={28} />
-            <ProfileWordmark size={16} theme="dark" />
-          </div>
+          <ProfileLogoFull height={38} theme="dark" priority className="w-[128px] lg:hidden" />
           {showBack && (
             <button onClick={onBack} className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 cursor-pointer font-medium">
               <ArrowLeft size={14} /> Back
@@ -464,27 +458,27 @@ function Welcome({ onComplete }: { onComplete: () => void }) {
 
   const steps = [
     {
-      icon: '🎉',
+      icon: Sparkles,
       title: "Welcome to PROFILE, James!",
       desc: "Your verified professional identity journey starts now. Let's get you set up in just a few minutes.",
       action: "Let's Go",
     },
     {
-      icon: '📸',
+      icon: User,
       title: 'Add your photo',
       desc: 'A professional photo builds trust and helps recruiters and collaborators recognise you.',
       action: 'Upload Photo',
       skip: true,
     },
     {
-      icon: '🎓',
+      icon: GraduationCap,
       title: 'Add your first credential',
       desc: 'Start with your highest qualification. We will help you get it verified by the issuing institution.',
       action: 'Add Credential',
       skip: true,
     },
     {
-      icon: '✅',
+      icon: CheckCircle,
       title: "You're ready!",
       desc: 'Your profile is set up. Explore the platform and start building your trust record.',
       action: 'Enter PROFILE',
@@ -493,6 +487,7 @@ function Welcome({ onComplete }: { onComplete: () => void }) {
   ]
 
   const cur = steps[step]
+  const StepIcon = cur.icon
 
   return (
     <div className="text-center">
@@ -503,7 +498,9 @@ function Welcome({ onComplete }: { onComplete: () => void }) {
         ))}
       </div>
 
-      <div className="text-5xl mb-5">{cur.icon}</div>
+      <div className="mx-auto mb-5 size-16 rounded-2xl bg-profile-blue-light text-profile-blue flex items-center justify-center">
+        <StepIcon size={30} />
+      </div>
       <h2 className="text-2xl font-black text-slate-800 mb-3" style={{ fontFamily: 'Plus Jakarta Sans' }}>{cur.title}</h2>
       <p className="text-slate-500 text-sm leading-relaxed mb-8 max-w-sm mx-auto">{cur.desc}</p>
 

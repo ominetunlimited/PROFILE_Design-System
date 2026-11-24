@@ -3,8 +3,8 @@ import {
   ArrowRight, Shield, CheckCircle, TrendingUp, Globe, Users, Briefcase, BookOpen, Star, ChevronRight, Play,
   Building2, GraduationCap, Scale, Zap, Lock, BarChart2,
   FileText, Layers
-} from 'lucide-react'
-import { ProfileIcon, ProfileWordmark } from '../components/ui/ProfileLogo'
+} from '../components/ui/icons'
+import { ProfileIcon, ProfileLogoFull, ProfilePrimaryLogo } from '../components/ui/ProfileLogo'
 
 interface LandingProps {
   onGetStarted: () => void
@@ -142,10 +142,7 @@ export default function Landing({ onGetStarted, onSignIn }: LandingProps) {
     <div className="min-h-screen bg-white">
       {/* Top nav */}
       <nav className="sticky top-0 z-50 glass border-b border-slate-100 px-5 lg:px-10 h-16 flex items-center gap-6">
-        <div className="flex items-center gap-2.5">
-          <ProfileIcon size={32} />
-          <ProfileWordmark size={18} theme="dark" />
-        </div>
+        <ProfileLogoFull height={42} theme="dark" priority className="w-[142px]" />
         <div className="hidden lg:flex items-center gap-6 ml-6">
           {['Features', 'Trust', 'For Institutions', 'Marketplace', 'Pricing'].map(item => (
             <button key={item} className="text-sm text-slate-600 hover:text-slate-900 font-medium cursor-pointer transition-colors">
@@ -187,12 +184,8 @@ export default function Landing({ onGetStarted, onSignIn }: LandingProps) {
             </div>
 
             {/* Logo mark — large */}
-            <div className="flex items-center gap-4 mb-6">
-              <ProfileIcon size={56} />
-              <div>
-                <ProfileWordmark size={48} theme="dark" />
-                <div className="text-xs text-slate-400 font-semibold tracking-widest uppercase mt-1">Professional Identity OS</div>
-              </div>
+            <div className="mb-6">
+              <ProfilePrimaryLogo size={250} theme="dark" priority className="w-[210px] sm:w-[250px] h-auto" />
             </div>
 
             <h1 className="text-4xl lg:text-5xl xl:text-[56px] font-black text-[#111111] leading-[1.08] tracking-tight" style={{ fontFamily: 'Plus Jakarta Sans' }}>
@@ -529,10 +522,7 @@ export default function Landing({ onGetStarted, onSignIn }: LandingProps) {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 mb-10">
             <div className="col-span-2 lg:col-span-1">
-              <div className="flex items-center gap-2 mb-3">
-                <ProfileIcon size={28} />
-                <ProfileWordmark size={16} theme="dark" />
-              </div>
+              <ProfileLogoFull height={40} theme="dark" className="w-[136px] mb-3" />
               <p className="text-xs text-slate-500 leading-relaxed max-w-[180px]">The global professional identity platform. Build trust. Earn opportunity.</p>
             </div>
             {[

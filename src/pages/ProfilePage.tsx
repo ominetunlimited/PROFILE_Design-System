@@ -3,7 +3,7 @@ import {
   MapPin, Globe, Mail, Edit2, Download,
   Plus, Star, Award, ExternalLink, Calendar,
   Code, Layers, BrainCircuit, BarChart3
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import TrustScore from '../components/ui/TrustScore'
 import VerificationBadge from '../components/ui/VerificationBadge'

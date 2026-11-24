@@ -2,7 +2,7 @@ import {
   Users, Shield, TrendingUp, Cpu, AlertTriangle, CheckCircle,
   ArrowUpRight, ArrowDownRight, Globe, Zap, BarChart2, Lock,
   Eye, MessageSquare, Star, Activity
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 

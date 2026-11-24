@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import {
   User, Lock, Bell, Eye, Shield, Palette, FileText, Trash2, Download, LogOut, Check,
-  Moon, Sun, Monitor } from 'lucide-react'
+  Moon, Sun, Monitor } from '../components/ui/icons'
+import { useToast } from '../components/ui/Toast'
 
 type SettingsSection = 'profile' | 'security' | 'privacy' | 'notifications' | 'appearance' | 'data' | 'danger'
 
@@ -43,6 +44,7 @@ function SettingRow({ label, desc, on, onChange }: { label: string; desc?: strin
 export default function Settings() {
   const [active, setActive] = useState<SettingsSection>('profile')
   const [theme, setTheme] = useState<'system' | 'light' | 'dark'>('system')
+  const { toast } = useToast()
   const [settings, setSettings] = useState({
     twoFactor: true,
     passkeys: false,
@@ -91,7 +93,10 @@ export default function Settings() {
               <option>Mountain View, CA, United States</option>
             </select>
           </div>
-          <button className="px-6 py-2.5 bg-[#1565D8] hover:bg-[#1255C0] text-white font-bold rounded-xl cursor-pointer transition-all text-sm">
+          <button
+            onClick={() => toast('success', 'Profile settings saved', 'Your changes are already reflected across PROFILE.')}
+            className="px-6 py-2.5 bg-[#1565D8] hover:bg-[#1255C0] text-white font-bold rounded-xl cursor-pointer transition-all text-sm"
+          >
             Save Changes
           </button>
         </div>
@@ -117,7 +122,12 @@ export default function Settings() {
                   <input type="password" placeholder="••••••••" className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-[#1565D8] bg-white" />
                 </div>
               ))}
-              <button className="px-5 py-2 bg-[#1565D8] text-white text-sm font-bold rounded-xl cursor-pointer hover:bg-[#1255C0]">Update Password</button>
+              <button
+                onClick={() => toast('success', 'Password updated', 'Your other active sessions remain secure.')}
+                className="px-5 py-2 bg-[#1565D8] text-white text-sm font-bold rounded-xl cursor-pointer hover:bg-[#1255C0]"
+              >
+                Update Password
+              </button>
             </div>
           </div>
 

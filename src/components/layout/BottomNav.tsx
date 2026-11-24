@@ -1,5 +1,6 @@
-import { Home, Users, Plus, Briefcase, FileText } from 'lucide-react'
+import { Home, Users, Plus, Briefcase, FileText } from '../ui/icons'
 import type { Page } from './Sidebar'
+import ProfileGlyph from '../ui/ProfileGlyph'
 
 interface BottomNavProps {
   currentPage: Page
@@ -29,7 +30,7 @@ export default function BottomNav({ currentPage, onNavigate, onCreateActivity }:
               currentPage === id ? 'text-[#1565D8]' : 'text-slate-500'
             }`}
           >
-            <Icon size={22} strokeWidth={currentPage === id ? 2.5 : 1.8} />
+            <ProfileGlyph icon={Icon} size="sm" active={currentPage === id} />
             <span className="text-[10px] font-semibold">{label}</span>
           </button>
         ))}
@@ -40,8 +41,9 @@ export default function BottomNav({ currentPage, onNavigate, onCreateActivity }:
           className="flex flex-col items-center gap-0.5 px-2 cursor-pointer -mt-5"
           aria-label="Create Activity"
         >
-          <div className="w-14 h-14 rounded-2xl bg-[#1565D8] flex items-center justify-center shadow-xl shadow-[#1565D8]/30 active:scale-95 transition-transform">
+          <div className="relative w-14 h-14 rounded-2xl bg-profile-blue flex items-center justify-center shadow-xl shadow-profile-blue/30 active:scale-95 transition-transform ring-4 ring-white">
             <Plus size={26} className="text-white" strokeWidth={2.5} />
+            <span className="absolute right-2 top-2 size-1.5 rounded-full bg-profile-gold" />
           </div>
           <span className="text-[10px] font-semibold text-slate-400 mt-0.5">Create</span>
         </button>
@@ -54,7 +56,12 @@ export default function BottomNav({ currentPage, onNavigate, onCreateActivity }:
               currentPage === id ? 'text-[#1565D8]' : 'text-slate-500'
             }`}
           >
-            <Icon size={22} strokeWidth={currentPage === id ? 2.5 : 1.8} />
+            <ProfileGlyph
+              icon={Icon}
+              tone={id === 'opportunity' ? 'opportunity' : 'brand'}
+              size="sm"
+              active={currentPage === id}
+            />
             <span className="text-[10px] font-semibold">{label}</span>
           </button>
         ))}

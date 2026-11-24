@@ -3,8 +3,9 @@ import {
   BarChart2, ShieldCheck, BadgeCheck, Layers, BookOpen, Settings,
   ChevronRight, Lock, CreditCard, Award, KanbanSquare, Bot,
   Building2, Cpu, Bell, HelpCircle
-} from 'lucide-react'
-import { ProfileIcon, ProfileWordmark } from '../ui/ProfileLogo'
+} from '../ui/icons'
+import { ProfileLogoFull } from '../ui/ProfileLogo'
+import ProfileGlyph from '../ui/ProfileGlyph'
 
 export type Page =
   | 'home' | 'discover' | 'connections' | 'cv' | 'opportunity'
@@ -18,6 +19,7 @@ interface NavItem {
   id: Page
   label: string
   icon: typeof Home
+  tone?: 'brand' | 'trust' | 'growth' | 'opportunity' | 'neutral'
   badge?: number | string
 }
 
@@ -27,20 +29,20 @@ const primary: NavItem[] = [
   { id: 'connections', label: 'Connections', icon: Users, badge: 3 },
   { id: 'notifications', label: 'Notifications', icon: Bell, badge: 3 },
   { id: 'cv', label: 'My Profile & CV', icon: FileText },
-  { id: 'opportunity', label: 'Opportunity Hub', icon: Briefcase, badge: 12 },
+  { id: 'opportunity', label: 'Opportunity Hub', icon: Briefcase, tone: 'opportunity', badge: 12 },
   { id: 'store', label: 'Marketplace', icon: Store },
   { id: 'messages', label: 'Messages', icon: MessageCircle, badge: 5 },
   { id: 'analytics', label: 'Analytics', icon: BarChart2 },
 ]
 
 const trust: NavItem[] = [
-  { id: 'trust', label: 'Trust Center', icon: ShieldCheck },
-  { id: 'verification', label: 'Verification', icon: BadgeCheck },
+  { id: 'trust', label: 'Trust Center', icon: ShieldCheck, tone: 'trust' },
+  { id: 'verification', label: 'Verification', icon: BadgeCheck, tone: 'trust' },
 ]
 
 const community: NavItem[] = [
-  { id: 'communities', label: 'Communities', icon: Layers },
-  { id: 'learning', label: 'Learning', icon: BookOpen },
+  { id: 'communities', label: 'Communities', icon: Layers, tone: 'growth' },
+  { id: 'learning', label: 'Learning', icon: BookOpen, tone: 'growth' },
 ]
 
 const career: NavItem[] = [
@@ -65,17 +67,17 @@ function NavLink({ item, active, onClick }: { item: NavItem; active: boolean; on
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group cursor-pointer
+      className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-xl text-sm font-medium transition-all duration-150 group cursor-pointer
         ${active
-          ? 'bg-[#1565D8] text-white shadow-sm'
-          : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+          ? 'bg-profile-blue text-white shadow-[0_8px_20px_rgba(21,101,216,0.2)]'
+          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-950'
         }`}
     >
-      <Icon size={18} className="shrink-0" />
+      <ProfileGlyph icon={Icon} tone={item.tone} size="sm" active={active} />
       <span className="flex-1 text-left">{item.label}</span>
       {item.badge && (
         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-          active ? 'bg-white/20 text-white' : 'bg-[#1565D8] text-white'
+          active ? 'bg-white/20 text-white' : 'bg-profile-blue-light text-profile-blue'
         }`}>
           {item.badge}
         </span>
@@ -89,13 +91,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
     <aside className="hidden lg:flex flex-col w-[240px] shrink-0 border-r border-slate-100 bg-white h-screen sticky top-0 overflow-y-auto sidebar-scroll">
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-100">
-        <div className="flex items-center gap-2.5">
-          <ProfileIcon size={32} />
-          <div>
-            <ProfileWordmark size={17} theme="dark" />
-            <div className="text-[9px] text-slate-400 font-semibold tracking-widest -mt-0.5 uppercase">Professional Identity</div>
-          </div>
-        </div>
+        <ProfileLogoFull height={42} theme="dark" priority className="w-[142px]" />
       </div>
 
       <div className="flex-1 px-3 py-4 space-y-5">

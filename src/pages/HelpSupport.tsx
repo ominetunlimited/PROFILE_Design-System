@@ -2,7 +2,7 @@ import { useState } from 'react'
 import {
   Search, ChevronRight, MessageCircle, BookOpen, Shield,
   Zap, Users, CreditCard, HelpCircle, ChevronDown, ExternalLink, Send
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Button from '../components/ui/Button'
 import EmptyState from '../components/ui/EmptyState'
 

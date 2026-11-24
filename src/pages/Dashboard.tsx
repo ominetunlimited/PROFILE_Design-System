@@ -2,12 +2,14 @@ import { useState } from 'react'
 import {
   TrendingUp, Eye, Users, Briefcase, Star, CheckCircle, ArrowUpRight,
   MoreHorizontal, Heart, MessageSquare, Share2, BookmarkPlus,
-  ChevronRight, Award, Clock, Zap
-} from 'lucide-react'
+  ChevronRight, Award, Clock, Zap, Sparkles
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import TrustScore from '../components/ui/TrustScore'
 import VerificationBadge from '../components/ui/VerificationBadge'
 import Button from '../components/ui/Button'
+import ProfileGlyph from '../components/ui/ProfileGlyph'
+import { useToast } from '../components/ui/Toast'
 
 const stats = [
   { label: 'Profile Views', value: '2,847', delta: '+18%', icon: Eye, color: '#1565D8', bg: '#EEF4FF' },
@@ -98,6 +100,17 @@ const verificationTasks = [
 function ActivityCard({ activity }: { activity: typeof activities[0] }) {
   const [liked, setLiked] = useState(false)
   const [saved, setSaved] = useState(false)
+  const { toast } = useToast()
+
+  const toggleSaved = () => {
+    const nextSaved = !saved
+    setSaved(nextSaved)
+    toast(
+      nextSaved ? 'success' : 'info',
+      nextSaved ? 'Saved to your evidence library' : 'Removed from saved items',
+      nextSaved ? 'You can organise it later without leaving the feed.' : undefined,
+    )
+  }
 
   return (
     <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden card-hover">
@@ -159,7 +172,7 @@ function ActivityCard({ activity }: { activity: typeof activities[0] }) {
           Share
         </button>
         <button
-          onClick={() => setSaved(!saved)}
+          onClick={toggleSaved}
           className={`ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
             saved ? 'text-[#1565D8] bg-[#EEF4FF]' : 'text-slate-500 hover:bg-slate-100'
           }`}
@@ -180,6 +193,16 @@ const returnEngineCards = [
 ]
 
 export default function Dashboard() {
+  const [activeFeed, setActiveFeed] = useState('All')
+  const [completedActions, setCompletedActions] = useState<string[]>([])
+  const { toast } = useToast()
+
+  const completeAction = (label: string, cta: string) => {
+    if (completedActions.includes(label)) return
+    setCompletedActions(current => [...current, label])
+    toast('success', `${cta} started`, 'Your dashboard has already been updated. You can continue browsing.')
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-4 lg:px-6 py-6 pb-24 lg:pb-6">
       {/* Daily Return Engine */}
@@ -188,7 +211,7 @@ export default function Dashboard() {
           <div>
             <div className="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">Today's Focus</div>
             <h1 className="text-xl font-bold" style={{ fontFamily: 'Plus Jakarta Sans' }}>
-              Good morning, James <span className="text-[#F4B400]">✦</span>
+              Good morning, James <Sparkles size={18} className="inline text-profile-gold ml-1" />
             </h1>
             <p className="text-white/70 text-sm mt-0.5">Trust Score +3 this week · 4 ranked actions ready</p>
           </div>
@@ -198,30 +221,43 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-          {returnEngineCards.map(({ icon: Icon, label, impact, urgency, cta }) => (
-            <button key={label} className="text-left bg-white/10 hover:bg-white/20 transition-colors rounded-xl p-3 cursor-pointer group">
+          {returnEngineCards.map(({ icon: Icon, label, impact, urgency, cta }) => {
+            const completed = completedActions.includes(label)
+            return (
+            <button
+              key={label}
+              onClick={() => completeAction(label, cta)}
+              className={`text-left transition-all rounded-xl p-3 cursor-pointer group border ${
+                completed
+                  ? 'bg-white/20 border-white/30 -translate-y-px'
+                  : 'bg-white/10 hover:bg-white/15 border-white/10 hover:border-white/25'
+              }`}
+            >
               <div className="flex items-center gap-1.5 mb-2">
-                <Icon size={13} className="text-white/70" />
+                <ProfileGlyph icon={completed ? CheckCircle : Icon} size="sm" active />
                 <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${urgency === 'high' ? 'bg-[#FF6F59]/30 text-orange-100' : 'bg-white/20 text-white/70'}`}>
-                  {urgency === 'high' ? 'Priority' : 'Suggested'}
+                  {completed ? 'In progress' : urgency === 'high' ? 'Priority' : 'Suggested'}
                 </span>
               </div>
               <div className="text-xs font-semibold text-white leading-snug mb-1">{label}</div>
               <div className="text-[10px] text-white/60 mb-2">{impact}</div>
-              <div className="text-[11px] font-bold text-[#F4B400] group-hover:text-white transition-colors">{cta} →</div>
+              <div className="text-[11px] font-bold text-profile-gold group-hover:text-white transition-colors">
+                {completed ? 'Opened' : cta} →
+              </div>
             </button>
-          ))}
+          )})}
         </div>
       </div>
 
       {/* Stats row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        {stats.map(({ label, value, delta, icon: Icon, color, bg }) => (
+        {stats.map(({ label, value, delta, icon: Icon }, index) => (
           <div key={label} className="bg-white rounded-2xl border border-slate-100 p-4 card-hover">
             <div className="flex items-start justify-between">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ backgroundColor: bg }}>
-                <Icon size={18} color={color} />
-              </div>
+              <ProfileGlyph
+                icon={Icon}
+                tone={(['brand', 'trust', 'growth', 'opportunity'] as const)[index]}
+              />
               <span className="text-xs font-semibold text-green-600 flex items-center gap-0.5">
                 <TrendingUp size={10} />{delta}
               </span>
@@ -241,7 +277,13 @@ export default function Dashboard() {
             <h2 className="font-bold text-slate-800" style={{ fontFamily: 'Plus Jakarta Sans' }}>Activity Feed</h2>
             <div className="flex gap-1">
               {['All', 'Following', 'Trending'].map(f => (
-                <button key={f} className={`px-3 py-1 rounded-lg text-xs font-medium cursor-pointer transition-colors ${f === 'All' ? 'bg-[#1565D8] text-white' : 'text-slate-500 hover:bg-slate-100'}`}>
+                <button
+                  key={f}
+                  onClick={() => setActiveFeed(f)}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
+                    f === activeFeed ? 'bg-profile-blue text-white shadow-sm' : 'text-slate-500 hover:bg-slate-100'
+                  }`}
+                >
                   {f}
                 </button>
               ))}

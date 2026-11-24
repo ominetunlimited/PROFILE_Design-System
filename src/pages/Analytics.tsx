@@ -2,7 +2,7 @@ import {
   AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis
 } from 'recharts'
-import { TrendingUp, Eye, Users, Award, Target, ArrowUpRight } from 'lucide-react'
+import { TrendingUp, Eye, Users, Award, Target, ArrowUpRight } from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 
 const profileViews = [

@@ -14,7 +14,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants: Record<ButtonVariant, string> = {
-  primary: 'bg-[#1565D8] hover:bg-[#1255C0] text-white shadow-sm hover:shadow-md',
+  primary: 'bg-profile-blue hover:bg-profile-deep text-white shadow-sm hover:shadow-[0_10px_24px_rgba(21,101,216,0.22)]',
   secondary: 'bg-[#EEF4FF] hover:bg-[#DBEAFE] text-[#1565D8]',
   ghost: 'hover:bg-slate-100 text-slate-700',
   outline: 'border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700',
@@ -33,16 +33,14 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
-      className={`inline-flex items-center justify-center font-semibold transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed select-none
+      className={`relative overflow-hidden inline-flex items-center justify-center font-semibold transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed select-none
         ${variants[variant]} ${sizes[size]} ${fullWidth ? 'w-full' : ''} ${className}`}
+      aria-busy={loading || undefined}
       disabled={loading || props.disabled}
       {...props}
     >
       {loading ? (
-        <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-        </svg>
+        <span className="size-3.5 rounded-full border-2 border-current border-r-transparent animate-spin" aria-hidden="true" />
       ) : icon}
       {children}
       {iconRight}

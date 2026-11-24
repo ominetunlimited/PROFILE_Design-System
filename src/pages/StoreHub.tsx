@@ -3,11 +3,12 @@ import {
   Store, Plus, Search, Filter, Star, Heart, Package,
   Settings, Tag, ChevronRight, Globe,
   DollarSign, Eye, Edit2, CreditCard
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import VerificationBadge from '../components/ui/VerificationBadge'
 import EmptyState from '../components/ui/EmptyState'
+import { useToast } from '../components/ui/Toast'
 
 type StoreView = 'browse' | 'my-store' | 'create'
 
@@ -60,6 +61,22 @@ export default function StoreHub() {
   const [saved, setSaved] = useState<number[]>([])
   const [createStep, setCreateStep] = useState(1)
   const [hasStore] = useState(true) // mock: user already has a store
+  const { toast } = useToast()
+
+  const toggleSaved = (id: number, name: string) => {
+    const nextSaved = !saved.includes(id)
+    setSaved(current => nextSaved ? [...current, id] : current.filter(storeId => storeId !== id))
+    toast(nextSaved ? 'success' : 'info', nextSaved ? 'Store saved' : 'Store removed', name)
+  }
+
+  const advanceStoreSetup = () => {
+    if (createStep < 4) {
+      setCreateStep(step => step + 1)
+      return
+    }
+    setView('my-store')
+    toast('success', 'Your store is live', 'Products and settings are ready in My Store.')
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 lg:px-6 py-6 pb-24 lg:pb-6">
@@ -112,7 +129,7 @@ export default function StoreHub() {
                     <div className="absolute top-3 left-3"><Badge variant="gold" size="sm" icon={<Star size={9} />}>Featured</Badge></div>
                   )}
                   <button
-                    onClick={e => { e.stopPropagation(); setSaved(s => s.includes(store.id) ? s.filter(x => x !== store.id) : [...s, store.id]) }}
+                    onClick={e => { e.stopPropagation(); toggleSaved(store.id, store.name) }}
                     className="absolute top-3 right-3 w-7 h-7 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow cursor-pointer"
                   >
                     <Heart size={13} fill={saved.includes(store.id) ? '#EF4444' : 'none'} color={saved.includes(store.id) ? '#EF4444' : '#94A3B8'} />
@@ -296,7 +313,7 @@ export default function StoreHub() {
 
             <div className="flex gap-2 pt-2">
               {createStep > 1 && <Button variant="outline" fullWidth onClick={() => setCreateStep(s => s - 1)}>Back</Button>}
-              <Button fullWidth onClick={() => createStep < 4 ? setCreateStep(s => s + 1) : setView('my-store')}>
+              <Button fullWidth onClick={advanceStoreSetup}>
                 {createStep === 4 ? 'Launch store' : 'Continue'}
               </Button>
             </div>

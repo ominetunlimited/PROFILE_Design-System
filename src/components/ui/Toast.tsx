@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext, useCallback, type ReactNode } from 'react'
-import { CheckCircle, AlertTriangle, XCircle, Info, X } from 'lucide-react'
+import { CheckCircle, AlertTriangle, XCircle, Info, X } from './icons'
 
 type ToastVariant = 'success' | 'warning' | 'error' | 'info'
 
@@ -71,7 +71,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ toast }}>
       {children}
-      <div className="fixed bottom-20 right-4 lg:bottom-6 lg:right-6 z-50 flex flex-col gap-2 items-end pointer-events-none">
+      <div
+        className="fixed bottom-20 right-4 lg:bottom-6 lg:right-6 z-50 flex flex-col gap-2 items-end pointer-events-none"
+        aria-live="polite"
+        aria-atomic="false"
+      >
         {toasts.map(item => (
           <div key={item.id} className="pointer-events-auto">
             <ToastItem item={item} onDismiss={dismiss} />

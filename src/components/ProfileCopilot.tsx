@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Bot, X, Sparkles, ChevronDown, Send, Lightbulb, TrendingUp, Shield } from 'lucide-react'
+import { Bot, X, Sparkles, ChevronDown, Send, Lightbulb, TrendingUp, Shield } from './ui/icons'
 import type { Page } from './layout/Sidebar'
 
 interface Props {

@@ -1,4 +1,4 @@
-import { CheckCircle, Shield, Award, Star } from 'lucide-react'
+import { CheckCircle, Shield, Award, Star } from './icons'
 
 type VerificationLevel = 'verified' | 'trusted' | 'premium' | 'institution'
 

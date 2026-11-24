@@ -1,4 +1,4 @@
-import { Play, Clock, TrendingUp, Star, Zap } from 'lucide-react'
+import { Play, Clock, TrendingUp, Star, Zap } from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 
 const inProgress = [

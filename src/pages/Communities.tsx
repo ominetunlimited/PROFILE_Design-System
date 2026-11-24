@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Users, TrendingUp, Lock, Plus, Search } from 'lucide-react'
+import { Users, TrendingUp, Lock, Plus, Search } from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
+import { useToast } from '../components/ui/Toast'
 
 const communities = [
   { id: 1, name: 'Distributed Systems Engineers', members: 42800, posts: '1.2k/week', verified: true, joined: true, category: 'Engineering', cover: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=120&fit=crop&auto=format', privacy: 'public' },
@@ -14,8 +15,19 @@ const communities = [
 export default function Communities() {
   const [joined, setJoined] = useState<number[]>([1, 2])
   const [tab, setTab] = useState<'discover' | 'mine'>('discover')
+  const { toast } = useToast()
 
   const displayed = tab === 'mine' ? communities.filter(c => joined.includes(c.id)) : communities
+
+  const toggleCommunity = (id: number, name: string, isPrivate: boolean) => {
+    const nextJoined = !joined.includes(id)
+    setJoined(current => nextJoined ? [...current, id] : current.filter(communityId => communityId !== id))
+    toast(
+      nextJoined ? 'success' : 'info',
+      nextJoined ? (isPrivate ? 'Request sent' : 'Community joined') : 'Community left',
+      name,
+    )
+  }
 
   return (
     <div className="max-w-5xl mx-auto px-4 lg:px-6 py-6 pb-24 lg:pb-6">
@@ -61,14 +73,14 @@ export default function Communities() {
                 <span className="flex items-center gap-1"><TrendingUp size={11} />{c.posts}</span>
               </div>
               <button
-                onClick={e => { e.stopPropagation(); setJoined(prev => prev.includes(c.id) ? prev.filter(x => x !== c.id) : [...prev, c.id]) }}
+                onClick={e => { e.stopPropagation(); toggleCommunity(c.id, c.name, c.privacy === 'private') }}
                 className={`mt-3 w-full py-2 rounded-xl text-xs font-bold cursor-pointer transition-all ${
                   joined.includes(c.id)
                     ? 'bg-slate-100 text-slate-500 hover:bg-red-50 hover:text-red-500'
                     : 'bg-[#1565D8] text-white hover:bg-[#1255C0]'
                 }`}
               >
-                {joined.includes(c.id) ? 'Joined ✓' : c.privacy === 'private' ? 'Request to Join' : 'Join Community'}
+                {joined.includes(c.id) ? 'Joined' : c.privacy === 'private' ? 'Request to Join' : 'Join Community'}
               </button>
             </div>
           </div>

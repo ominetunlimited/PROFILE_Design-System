@@ -31,16 +31,23 @@ import OrgDashboard from './pages/OrgDashboard'
 import { ToastProvider } from './components/ui/Toast'
 
 type AppView = 'landing' | 'auth-signin' | 'auth-signup' | 'app'
+export type AccountContext = 'personal' | 'organisation'
 
 export default function App() {
   const [view, setView] = useState<AppView>('landing')
   const [currentPage, setCurrentPage] = useState<Page>('home')
+  const [accountContext, setAccountContext] = useState<AccountContext>('personal')
   const [showCreateActivity, setShowCreateActivity] = useState(false)
   const [showCopilot, setShowCopilot] = useState(false)
 
   const navigate = (page: Page) => {
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const switchAccount = (account: AccountContext) => {
+    setAccountContext(account)
+    navigate(account === 'organisation' ? 'org' : 'home')
   }
 
   const renderPage = () => {
@@ -98,11 +105,16 @@ export default function App() {
   // Main app
   return (
   <ToastProvider>
-    <div className="min-h-screen bg-[#F8FAFC] flex">
+    <div className="profile-app min-h-screen flex">
       <Sidebar currentPage={currentPage} onNavigate={navigate} />
 
       <div className="flex-1 min-w-0 flex flex-col">
-        <TopBar onNavigate={navigate} onCreateActivity={() => setShowCreateActivity(true)} />
+        <TopBar
+          accountContext={accountContext}
+          onSwitchAccount={switchAccount}
+          onNavigate={navigate}
+          onCreateActivity={() => setShowCreateActivity(true)}
+        />
         <main className="flex-1">
           {renderPage()}
         </main>

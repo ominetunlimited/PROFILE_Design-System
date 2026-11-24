@@ -2,9 +2,10 @@ import { useState } from 'react'
 import {
   Bell, CheckCircle, Shield, Users, Briefcase, Star,
   MessageCircle, Award, TrendingUp, Settings, Check
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Button from '../components/ui/Button'
 import EmptyState from '../components/ui/EmptyState'
+import { useToast } from '../components/ui/Toast'
 
 type NotifType = 'all' | 'trust' | 'opportunity' | 'social' | 'system'
 
@@ -89,11 +90,15 @@ const tabs: { id: NotifType; label: string }[] = [
 export default function Notifications() {
   const [active, setActive] = useState<NotifType>('all')
   const [items, setItems] = useState(notifications)
+  const { toast } = useToast()
 
   const filtered = active === 'all' ? items : items.filter(n => n.type === active)
   const unreadCount = items.filter(n => !n.read).length
 
-  const markAllRead = () => setItems(prev => prev.map(n => ({ ...n, read: true })))
+  const markAllRead = () => {
+    setItems(prev => prev.map(n => ({ ...n, read: true })))
+    toast('success', 'You’re all caught up', `${unreadCount} notifications marked as read.`)
+  }
   const markRead = (id: number) => setItems(prev => prev.map(n => n.id === id ? { ...n, read: true } : n))
 
   return (

@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import {
   Lock, Shield, Smartphone, Globe, AlertTriangle, CheckCircle,
-  Clock, Eye, Trash2, Key, Mail, RefreshCw, Download
-} from 'lucide-react'
+  Clock, Eye, Trash2, Key, Mail, RefreshCw, Download, Link2, Code, Calendar
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
+import { useToast } from '../components/ui/Toast'
 
 const sessions = [
   { id: 1, device: 'MacBook Pro 16"', browser: 'Chrome 121', location: 'San Francisco, CA', ip: '104.18.12.54', lastActive: 'Active now', current: true, trusted: true },
@@ -22,9 +23,9 @@ const timeline = [
 ]
 
 const apps = [
-  { id: 1, name: 'LinkedIn', scope: 'Read profile, import connections', granted: '3 months ago', logo: '🔗' },
-  { id: 2, name: 'GitHub', scope: 'Read repositories, verify contributions', granted: '5 months ago', logo: '🐙' },
-  { id: 3, name: 'Google Workspace', scope: 'Read calendar, sync contacts', granted: '1 year ago', logo: '📅' },
+  { id: 1, name: 'LinkedIn', scope: 'Read profile, import connections', granted: '3 months ago', icon: Link2 },
+  { id: 2, name: 'GitHub', scope: 'Read repositories, verify contributions', granted: '5 months ago', icon: Code },
+  { id: 3, name: 'Google Workspace', scope: 'Read calendar, sync contacts', granted: '1 year ago', icon: Calendar },
 ]
 
 type Tab = 'overview' | 'sessions' | 'timeline' | 'recovery' | 'apps'
@@ -33,6 +34,17 @@ export default function SecurityCentre() {
   const [activeTab, setActiveTab] = useState<Tab>('overview')
   const [revokedIds, setRevokedIds] = useState<number[]>([])
   const [revokedApps, setRevokedApps] = useState<number[]>([])
+  const { toast } = useToast()
+
+  const revokeSession = (id: number) => {
+    setRevokedIds(current => [...current, id])
+    toast('success', 'Session revoked', 'Access was removed immediately.')
+  }
+
+  const revokeApplication = (id: number) => {
+    setRevokedApps(current => [...current, id])
+    toast('success', 'Application access revoked', 'Its permissions have been removed.')
+  }
 
   const tabs: { id: Tab; label: string; icon: typeof Lock }[] = [
     { id: 'overview', label: 'Overview', icon: Shield },
@@ -131,7 +143,7 @@ export default function SecurityCentre() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setRevokedIds(r => [...r, s.id])}
+                  onClick={() => revokeSession(s.id)}
                 >
                   Revoke
                 </Button>
@@ -196,9 +208,13 @@ export default function SecurityCentre() {
       {activeTab === 'apps' && (
         <div className="space-y-3">
           <p className="text-sm text-slate-600 mb-4">Applications with access to your PROFILE data. Review and revoke access at any time.</p>
-          {apps.map(app => (
+          {apps.map(app => {
+            const AppIcon = app.icon
+            return (
             <div key={app.id} className="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-4">
-              <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-xl">{app.logo}</div>
+              <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600">
+                <AppIcon size={18} />
+              </div>
               <div className="flex-1">
                 <div className="font-semibold text-sm text-slate-800">{app.name}</div>
                 <div className="text-xs text-slate-500 mt-0.5">{app.scope}</div>
@@ -209,13 +225,13 @@ export default function SecurityCentre() {
                   <Eye size={14} className="text-slate-400" />
                 </button>
                 {!revokedApps.includes(app.id) ? (
-                  <Button variant="outline" size="sm" onClick={() => setRevokedApps(r => [...r, app.id])}>Revoke</Button>
+                  <Button variant="outline" size="sm" onClick={() => revokeApplication(app.id)}>Revoke</Button>
                 ) : (
                   <Badge variant="error" size="sm">Revoked</Badge>
                 )}
               </div>
             </div>
-          ))}
+          )})}
 
           <div className="mt-6 p-4 bg-[#FEE2E2] border border-[#DC2626]/20 rounded-2xl">
             <div className="font-bold text-sm text-[#DC2626] mb-1">Danger Zone</div>

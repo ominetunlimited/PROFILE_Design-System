@@ -2,7 +2,7 @@ import { useState } from 'react'
 import {
   Shield, CheckCircle, Clock, Upload,
   FileText, ChevronRight, ExternalLink, AlertCircle, Plus, Lock
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import TrustScore from '../components/ui/TrustScore'
 import VerificationBadge from '../components/ui/VerificationBadge'

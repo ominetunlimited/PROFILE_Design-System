@@ -3,9 +3,10 @@ import {
   Briefcase, MapPin, Clock, TrendingUp, Star, BookmarkPlus,
   Filter, Search, Building2, ExternalLink, DollarSign,
   GraduationCap, Award, Zap
-} from 'lucide-react'
+} from '../components/ui/icons'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
+import { useToast } from '../components/ui/Toast'
 
 type OpportunityType = 'all' | 'jobs' | 'contracts' | 'scholarships' | 'internships' | 'research'
 
@@ -111,9 +112,16 @@ export default function OpportunityHub() {
   const [activeType, setActiveType] = useState<OpportunityType>('all')
   const [selectedId, setSelectedId] = useState<number | null>(1)
   const [saved, setSaved] = useState<number[]>([])
+  const { toast } = useToast()
 
   const filtered = activeType === 'all' ? opportunities : opportunities.filter(o => o.type === activeType)
   const selected = opportunities.find(o => o.id === selectedId)
+
+  const toggleSaved = (id: number, title: string) => {
+    const nextSaved = !saved.includes(id)
+    setSaved(current => nextSaved ? [...current, id] : current.filter(itemId => itemId !== id))
+    toast(nextSaved ? 'success' : 'info', nextSaved ? 'Opportunity saved' : 'Removed from saved', title)
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 lg:px-6 py-6 pb-24 lg:pb-6">
@@ -186,7 +194,7 @@ export default function OpportunityHub() {
                       <div className="text-xs text-slate-500 mt-0.5">{opp.company} · {opp.companySize}</div>
                     </div>
                     <button
-                      onClick={e => { e.stopPropagation(); setSaved(s => s.includes(opp.id) ? s.filter(x => x !== opp.id) : [...s, opp.id]) }}
+                      onClick={e => { e.stopPropagation(); toggleSaved(opp.id, opp.title) }}
                       className="text-slate-300 hover:text-[#1565D8] transition-colors cursor-pointer shrink-0"
                     >
                       <BookmarkPlus size={16} fill={saved.includes(opp.id) ? '#1565D8' : 'none'} color={saved.includes(opp.id) ? '#1565D8' : undefined} />
@@ -282,7 +290,14 @@ export default function OpportunityHub() {
             </div>
 
             <div className="p-4 border-t border-slate-100 flex gap-2">
-              <Button fullWidth size="sm" icon={<Zap size={14} />}>Apply with PROFILE</Button>
+              <Button
+                fullWidth
+                size="sm"
+                icon={<Zap size={14} />}
+                onClick={() => toast('success', 'Application started', `${selected.company} can now receive your verified PROFILE.`)}
+              >
+                Apply with PROFILE
+              </Button>
               <button className="p-2 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer">
                 <ExternalLink size={15} className="text-slate-500" />
               </button>
